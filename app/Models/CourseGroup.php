@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Course;
-use App\Models\StudentCourse;
 
 class CourseGroup extends Model
 {
@@ -32,4 +31,5 @@ class CourseGroup extends Model
     {
         return $this->belongsTo(User::class,'student_id');
     }
+    
 }

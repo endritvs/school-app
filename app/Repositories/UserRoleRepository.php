@@ -8,7 +8,7 @@ class UserRoleRepository implements UserRoleRepositoryInterface
 {
     public function getAllRoles()
     {
-        return UserRoles::latest()->paginate(10);
+        return UserRoles::latest()->get();
     }
 
     public function deleteRole($roleId)

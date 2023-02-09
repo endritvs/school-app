@@ -12,12 +12,10 @@ use App\Interfaces\CourseRepositoryInterface;
 class CourseGroupController extends Controller
 {   
     private CourseGroupRepositoryInterface $courseGroupRepository;
-    private UserRepositoryInterface $userRepository;
     // private CourseRepositoryInterface $courseRepository;
 
-    public function __construct(CourseGroupRepositoryInterface $courseGroupRepository,CourseRepositoryInterface $courseRepository,UserRepositoryInterface $userRepository)
+    public function __construct(CourseGroupRepositoryInterface $courseGroupRepository)
     {       
-        $this->userRepository=$userRepository;
         $this->courseGroupRepository=$courseGroupRepository;
         // $this->courseRepository=$courseRepository;
     }
@@ -30,19 +28,23 @@ class CourseGroupController extends Controller
     public function index()
     {
         $coursesGroups=$this->courseGroupRepository->getAllCourseGroups();
-        $students=$this->userRepository->getUsersByRole(3);
-        // $groups = $this->courseRepository->getAllCourses();
-        return view('coursesGroups/index',compact('coursesGroups','students'));
+        return view('coursesGroups/index',compact('coursesGroups'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function getCourseGroupForTeacher()
     {
-        //
+        $coursesGroups=$this->courseGroupRepository->getCourseGroupsByTeacherId();
+        $coursesGroups=$this->paginate($coursesGroups,10);
+        $coursesGroups->withPath('/teacher');
+        return view('teacher/index',compact('coursesGroups'));
+    }
+    
+    public function getCourseGroupForStudent()
+    {
+        $coursesGroups=$this->courseGroupRepository->getCourseGroupsByStudentId();
+        $coursesGroups=$this->paginate($coursesGroups,10);
+        $coursesGroups->withPath('/student');
+        return view('student/index',compact('coursesGroups'));
     }
 
     /**
@@ -60,40 +62,6 @@ class CourseGroupController extends Controller
         ];
         $this->courseGroupRepository->storeCourseGroup($courseGroupDetails);
         return back()->with(['msg'=>'Course Group created successfully!']);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\CourseGroup  $courseGroup
-     * @return \Illuminate\Http\Response
-     */
-    public function show(CourseGroup $courseGroup)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\CourseGroup  $courseGroup
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(CourseGroup $courseGroup)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateCourseGroupRequest  $request
-     * @param  \App\Models\CourseGroup  $courseGroup
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateCourseGroupRequest $request,$id)
-    {
-        //
     }
 
     /**

@@ -2,7 +2,11 @@
 
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
+    @if(Auth::user()->role_id===1)
+    <div class="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8">
+    @else
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    @endif
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
@@ -11,36 +15,91 @@
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                     </a>
                 </div>
+        @admin
+        <div class="hidden py-2 space-x-8 sm:-my-px sm:ml-10 sm:flex">
+            <x-nav-link :href="route('all.users')" :active="request()->routeIs('all.users')">
+                {{ __('Dashboard') }}
+            </x-nav-link>
+        </div>
+        <div class="hidden py-2 space-x-8 sm:-my-px sm:ml-10 sm:flex">
+            <x-nav-link :href="route('all.roles')" :active="request()->routeIs('all.roles')">
+                {{ __('Roles') }}
+            </x-nav-link>
+        </div>
+        <div class="hidden py-2 space-x-8 sm:-my-px sm:ml-10 sm:flex">
+            <x-nav-link :href="route('all.courses')" :active="request()->routeIs('all.courses')">
+                {{ __('Courses') }}
+            </x-nav-link>
+        </div>
+        <div class="hidden py-2 space-x-8 sm:-my-px sm:ml-10 sm:flex">
+            <x-nav-link :href="route('all.courses.groups')" :active="request()->routeIs('all.courses.groups')">
+                {{ __('Courses Groups') }}
+            </x-nav-link>
+        </div>
+        <div class="hidden py-2 space-x-8 sm:-my-px sm:ml-10 sm:flex">
+            <x-nav-link :href="route('all.curriculums')" :active="request()->routeIs('all.curriculums')">
+                {{ __('Curriculums') }}
+            </x-nav-link>
+        </div>
+        <div class="hidden py-2 space-x-8 sm:-my-px sm:ml-10 sm:flex">
+            <x-nav-link :href="route('all.events')" :active="request()->routeIs('all.events')">
+                {{ __('Events') }}
+            </x-nav-link>
+        </div>
+        <div class="hidden py-2 space-x-8 sm:-my-px sm:ml-10 sm:flex">
+            <x-nav-link :href="route('all.classes')" :active="request()->routeIs('all.classes')">
+                {{ __('Classes') }}
+            </x-nav-link>
+        </div>
+        <div class="hidden py-2 space-x-8 sm:-my-px sm:ml-10 sm:flex">
+            <x-nav-link :href="route('all.class.course.groups')" :active="request()->routeIs('all.class.course.groups')">
+                {{ __('Classes Course Groups') }}
+            </x-nav-link>
+        </div>
+        @endadmin
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('all.users')" :active="request()->routeIs('all.users')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('all.roles')" :active="request()->routeIs('all.roles')">
-                        {{ __('Roles') }}
-                    </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('all.courses')" :active="request()->routeIs('all.courses')">
-                        {{ __('Courses') }}
-                    </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('all.courses.groups')" :active="request()->routeIs('all.courses.groups')">
-                        {{ __('Courses Groups') }}
-                    </x-nav-link>
-                </div>
+            @teacher
+            <div class="py-2 space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                <x-nav-link :href="route('teacher.course.groups')" :active="request()->routeIs('teacher.course.groups')">
+                    {{ __('My Courses Groups') }}
+                </x-nav-link>
             </div>
+            <div class="py-2 space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                <x-nav-link :href="route('teacher.events')" :active="request()->routeIs('teacher.events')">
+                    {{ __('School Events') }}
+                </x-nav-link>
+            </div>
+            @endteacher
+
+
+                @student
+                <div class="py-2 space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('student.course.groups')" :active="request()->routeIs('student.course.groups')">
+                        {{ __('My Courses Groups') }}
+                    </x-nav-link>
+                </div>
+                <div class="py-2 space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('student.events')" :active="request()->routeIs('student.events')">
+                        {{ __('School Events') }}
+                    </x-nav-link>
+                </div>
+                @endstudent
+                <div class="py-2 space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link href="/chatify" :active="request()->routeIs('student.events')">
+                        {{ __('Chat') }}
+                    </x-nav-link>
+                </div>
+
+      
+
+    </div>
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
+                            <div class="capitalize">{{ Auth::user()->name." - ". Auth::user()->role->name }}</div>
 
                             <div class="ml-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -92,7 +151,7 @@
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
+                <div class="font-medium text-base text-gray-800 capitalize">{{ Auth::user()->name }}</div>
                 <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
             </div>
 
